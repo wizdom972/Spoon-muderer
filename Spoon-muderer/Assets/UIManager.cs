@@ -8,18 +8,22 @@ public class UIManager : MonoBehaviour {
     private float money;     // 재화
     Text MoneyText;          // 현재 재화 텍스트
 
+    private float[] fac;
     private float fac1, fac2, fac3, fac4, fac5, fac6, fac7;
 
 	// Use this for initialization
 	void Start () {
         money = 0;
-        fac1 = 1;
-        fac2 = 10;
-        fac3 = 10;
-        fac4 = 10;
-        fac5 = 10;
-        fac6 = 10;
-        fac7 = 10;
+
+        fac = new float[7];
+        fac[0] = 1;
+        fac[1] = 10;
+        fac[2] = 10;
+        fac[3] = 10;
+        fac[4] = 10;
+        fac[5] = 10;
+        fac[6] = 10;
+
         MoneyText = GameObject.Find("current money").GetComponent<Text>();
 	}
 	
@@ -50,66 +54,35 @@ public class UIManager : MonoBehaviour {
 
     public void onClickButtonFacility(Button b)
     {
-        char num = b.name[6];
-        switch(num)
+        int num = b.name[6] - '1';
+        if (getMoney() >= fac[num])
         {
-            case '1':
-                if (getMoney() >= fac1)
-                {
-                    setMoney((-1) * fac1);
-                    fac1 += 1;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac1;
-                }
-                break;
-            case '2':
-                if (getMoney() >= fac2)
-                {
-                    setMoney((-1) * fac2);
-                    fac2 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac2;
-                }
-                break;
-            case '3':
-                if (getMoney() >= fac3)
-                {
-                    setMoney((-1) * fac3);
-                    fac3 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac3;
-                }
-                break;
-            case '4':
-                if (getMoney() >= fac4)
-                {
-                    setMoney((-1) * fac4);
-                    fac4 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac4;
-                }
-                break;
-            case '5':
-                if (getMoney() >= fac5)
-                {
-                    setMoney((-1) * fac5);
-                    fac5 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac5;
-                }
-                break;
-            case '6':
-                if (getMoney() >= fac6)
-                {
-                    setMoney((-1) * fac6);
-                    fac6 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac6;
-                }
-                break;
-            case '7':
-                if (getMoney() >= fac7)
-                {
-                    setMoney((-1) * fac7);
-                    fac7 += 10;
-                    b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac7;
-                }
-                break;
-
+            setMoney((-1) * fac[num]);
+            switch (num)
+            {
+                case 0:
+                    fac[num] += 1;
+                    break;
+                case 1:
+                    fac[num] += 10;
+                    break;
+                case 2:
+                    fac[num] += 10;
+                    break;
+                case 3:
+                    fac[num] += 10;
+                    break;
+                case 4:
+                    fac[num] += 10;
+                    break;
+                case 5:
+                    fac[num] += 10;
+                    break;
+                case 6:
+                    fac[num] += 10;
+                    break;
+            }
+            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac[num];
         }
     }
 }
