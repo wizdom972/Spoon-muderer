@@ -7,12 +7,15 @@ public class UIManager : MonoBehaviour {
 
     private float money;     // 재화
     Text MoneyText;          // 현재 재화 텍스트
+    private int facilityNum = 7;  // 재화 생산 시설 개수
+
 
     private float[] fac;
     private float fac1, fac2, fac3, fac4, fac5, fac6, fac7;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         money = 0;
 
         fac = new float[7];
@@ -25,10 +28,12 @@ public class UIManager : MonoBehaviour {
         fac[6] = 10;
 
         MoneyText = GameObject.Find("current money").GetComponent<Text>();
-	}
+
+    }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (MoneyText != null)
         {
             MoneyText.text = "Current: " + getMoney();
@@ -58,6 +63,7 @@ public class UIManager : MonoBehaviour {
         if (getMoney() >= fac[num])
         {
             setMoney((-1) * fac[num]);
+            
             switch (num)
             {
                 case 0:
