@@ -7,18 +7,20 @@ public class UIManager : MonoBehaviour {
 
     private float money;     // 재화
     Text MoneyText;          // 현재 재화 텍스트
-    private int facilityNum = 7;  // 재화 생산 시설 개수
+    private int facNum = 11; // 재화 생산 시설 개수
 
     private float[] fac;     // 재화 생산 시설 업그레이드 비용
 
-    GameObject FacScroll, SpoonScroll;
+    GameObject FacScroll, UpgScroll; // 스크롤뷰 오브젝트
+
+    FacilityManager fm;
 
     // Use this for initialization
     void Start()
     {
         money = 0;
 
-        fac = new float[7];
+        fac = new float[facNum];
         fac[0] = 1;
         fac[1] = 10;
         fac[2] = 10;
@@ -26,12 +28,18 @@ public class UIManager : MonoBehaviour {
         fac[4] = 10;
         fac[5] = 10;
         fac[6] = 10;
+        fac[7] = 10;
+        fac[8] = 10;
+        fac[9] = 10;
+        fac[10] = 10;
 
         MoneyText = GameObject.Find("current money").GetComponent<Text>();
         FacScroll = GameObject.Find("Facility Scroll");
-        SpoonScroll = GameObject.Find("Spoon Scroll");
+        UpgScroll = GameObject.Find("Upgrade Scroll");
 
-        SpoonScroll.SetActive(false);
+        UpgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
+
+        fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
     }
 	
 	// Update is called once per frame
@@ -60,13 +68,30 @@ public class UIManager : MonoBehaviour {
         Debug.Log("money + 10, now: " + getMoney());
     }
 
-    public void onClickButtonFacility(Button b)
+    public void onClickButtonFacility(Button b) 
     {
-        int num = b.name[6] - '1';
+        int num;
+        // 재화 생산시설 구매 버튼
+        if (b.name.Length == 7)
+        {
+            num = b.name[6] - '1';
+        }
+        else
+        {
+            num = b.name[7] - '1' + 10;
+        }
+        //- '1';
         if (getMoney() >= fac[num])
         {
+            // 구매 여부 확인
+            if (!fm.getIsPurchased()[num])
+            {
+                fm.newFacObj(num);
+                fm.setIsPurchased(num, true);
+            }
+            // 재화 소모
             setMoney((-1) * fac[num]);
-            
+            // 구매 가격 증가
             switch (num)
             {
                 case 0:
@@ -90,20 +115,35 @@ public class UIManager : MonoBehaviour {
                 case 6:
                     fac[num] += 10;
                     break;
+                case 7:
+                    fac[num] += 10;
+                    break;
+                case 8:
+                    fac[num] += 10;
+                    break;
+                case 9:
+                    fac[num] += 10;
+                    break;
+                case 10:
+                    fac[num] += 10;
+                    break;
             }
             b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac[num];
         }
     }
     public void onClickButtonMenu(Button b)
     {
+        // 하단 메뉴 버튼
         if (b.name == "Facilities Button")
         {
-            SpoonScroll.SetActive(false);
+            // 재화생산시설 스크롤뷰 활성화
+            UpgScroll.SetActive(false);
             FacScroll.SetActive(true);
         }
         else
         {
-            SpoonScroll.SetActive(true);
+            // 업그레이드 스크롤뷰 활성화
+            UpgScroll.SetActive(true);
             FacScroll.SetActive(false);
         }
     }

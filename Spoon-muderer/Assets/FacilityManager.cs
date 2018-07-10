@@ -7,6 +7,7 @@ public class FacilityManager : MonoBehaviour {
     public GameObject facObj;
     public int facNum;
 
+    public GameObject[] facilities;
     public bool[] isPurchased;
 
 	// Use this for initialization
@@ -14,11 +15,14 @@ public class FacilityManager : MonoBehaviour {
     {
         facNum = 0;
 
-        isPurchased = new bool[7];
-        for (int i = 0; i < 7; i++)
+        facilities = new GameObject[11];
+
+        isPurchased = new bool[11];
+        for (int i = 0; i < 11; i++)
         {
             isPurchased[i] = false;
         }
+        isPurchased[0] = true;
 	}
 	
 	// Update is called once per frame
@@ -37,8 +41,10 @@ public class FacilityManager : MonoBehaviour {
         this.isPurchased[position] = set;
     }
 
-    public void newFacObj()
+    public void newFacObj(int num)
     {
-        Instantiate(facObj, new Vector3(140, 340, 0), Quaternion.identity);
+        facilities[num] = Instantiate(facObj, new Vector3((float) 63.5 + 64 * num, 800, 0), Quaternion.identity);
+        facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
+        facilities[num].gameObject.name = "Facility" + (num + 1);
     }
 }
