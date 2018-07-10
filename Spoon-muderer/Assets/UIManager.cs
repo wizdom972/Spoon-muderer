@@ -9,9 +9,9 @@ public class UIManager : MonoBehaviour {
     Text MoneyText;          // 현재 재화 텍스트
     private int facilityNum = 7;  // 재화 생산 시설 개수
 
+    private float[] fac;     // 재화 생산 시설 업그레이드 비용
 
-    private float[] fac;
-    private float fac1, fac2, fac3, fac4, fac5, fac6, fac7;
+    GameObject FacScroll, SpoonScroll;
 
     // Use this for initialization
     void Start()
@@ -28,7 +28,10 @@ public class UIManager : MonoBehaviour {
         fac[6] = 10;
 
         MoneyText = GameObject.Find("current money").GetComponent<Text>();
+        FacScroll = GameObject.Find("Facility Scroll");
+        SpoonScroll = GameObject.Find("Spoon Scroll");
 
+        SpoonScroll.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -89,6 +92,19 @@ public class UIManager : MonoBehaviour {
                     break;
             }
             b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac[num];
+        }
+    }
+    public void onClickButtonMenu(Button b)
+    {
+        if (b.name == "Facilities Button")
+        {
+            SpoonScroll.SetActive(false);
+            FacScroll.SetActive(true);
+        }
+        else
+        {
+            SpoonScroll.SetActive(true);
+            FacScroll.SetActive(false);
         }
     }
 }
