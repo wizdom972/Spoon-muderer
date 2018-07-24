@@ -45,12 +45,12 @@ public class FacilityManager : MonoBehaviour {
 		
 	}
 
-    public bool[] getIsPurchased()
+    public bool[] GetIsPurchased()
     {
         return this.isPurchased;
     }
 
-    public void setIsPurchased(int position, bool set)
+    public void SetIsPurchased(int position, bool set)
     {
         this.isPurchased[position] = set;
     }
@@ -62,12 +62,12 @@ public class FacilityManager : MonoBehaviour {
         facilities[num].gameObject.name = "Facility" + (num + 1);
     }
 
-    public float getCurrentEarn()
+    public float GetCurrentEarn()
     {
         float earn = 0;
         for (int i = 0; i < 11; i++)
         {
-            if (getIsPurchased()[i])
+            if (GetIsPurchased()[i])
             {
                 earn += facEarn[i];
             }

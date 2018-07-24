@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-    private float money;     // 재화
-    Text MoneyText;          // 현재 재화 텍스트
-    Text EarnText;           // 현재 생산 텍스트
-    private int facNum = 11; // 재화 생산 시설 개수
+    private float _money;     // 재화
+    Text moneyText;          // 현재 재화 텍스트
+    Text earnText;           // 현재 생산 텍스트
+    private int _facNum = 11; // 재화 생산 시설 개수
 
-    private float[] initFac; // 초기 재화 생산 시설 구매 비용
-    private float[] fac;     // 재화 생산 시설 업그레이드 비용
-    private int[] facLevel;
+    private float[] _initFac; // 초기 재화 생산 시설 구매 비용
+    private float[] _fac;     // 재화 생산 시설 업그레이드 비용
+    private int[] _facLevel;
 
-    GameObject FacScroll, UpgScroll; // 스크롤뷰 오브젝트
+    GameObject facScroll, upgScroll; // 스크롤뷰 오브젝트
 
     FacilityManager fm;
 
@@ -23,40 +23,40 @@ public class UIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        money = 0;
+        _money = 0;
 
-        fac = new float[facNum];
-        fac[0] = 1;
-        fac[1] = 100;
-        fac[2] = 500;
-        fac[3] = 3000;
-        fac[4] = 10000;
-        fac[5] = 40000;
-        fac[6] = 200000;
-        fac[7] = 1700000;
-        fac[8] = 123456789;
-        fac[9] = 4000000000;
-        fac[10] = 75000000000;
+        _fac = new float[_facNum];
+        _fac[0] = 1;
+        _fac[1] = 100;
+        _fac[2] = 500;
+        _fac[3] = 3000;
+        _fac[4] = 10000;
+        _fac[5] = 40000;
+        _fac[6] = 200000;
+        _fac[7] = 1700000;
+        _fac[8] = 123456789;
+        _fac[9] = 4000000000;
+        _fac[10] = 75000000000;
 
-        initFac = new float[facNum];
-        for (int i = 0; i < facNum; i++)
+        _initFac = new float[_facNum];
+        for (int i = 0; i < _facNum; i++)
         {
-            initFac[i] = fac[i];
+            _initFac[i] = _fac[i];
         }
 
-        facLevel = new int[facNum];
-        for (int j = 0; j < facNum; j++)
+        _facLevel = new int[_facNum];
+        for (int j = 0; j < _facNum; j++)
         {
-            facLevel[j] = 0;
+            _facLevel[j] = 0;
         }
-        facLevel[0] = 1;
+        _facLevel[0] = 1;
 
-        MoneyText = GameObject.Find("current money").GetComponent<Text>();
-        EarnText  = GameObject.Find("earning money").GetComponent<Text>();
-        FacScroll = GameObject.Find("Facility Scroll");
-        UpgScroll = GameObject.Find("Upgrade Scroll");
+        moneyText = GameObject.Find("current money").GetComponent<Text>();
+        earnText  = GameObject.Find("earning money").GetComponent<Text>();
+        facScroll = GameObject.Find("Facility Scroll");
+        upgScroll = GameObject.Find("Upgrade Scroll");
 
-        UpgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
+        upgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
 
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
@@ -67,13 +67,13 @@ public class UIManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (MoneyText != null)
+        if (moneyText != null)
         {
-            MoneyText.text = "Current: " + GetMoney();
+            moneyText.text = "Current: " + GetMoney();
         }
-        if (EarnText != null)
+        if (earnText != null)
         {
-            EarnText.text = "Earning: " + fm.getCurrentEarn();
+            earnText.text = "Earning: " + fm.GetCurrentEarn();
         }
         timeSpan += Time.deltaTime;
         if (timeSpan > checkTime)
@@ -85,21 +85,21 @@ public class UIManager : MonoBehaviour {
 
     public float GetMoney()   // 재화 반환
     {
-        return money;
+        return _money;
     }
     
     public void SetMoney(float extra)  // 재화 수정
     {
-        money = GetMoney() + extra;
+        _money = GetMoney() + extra;
     }
 
-    public void onClickButtonMoneyUP()  // 클릭 시 재화 증가
+    public void OnClickButtonMoneyUP()  // 클릭 시 재화 증가
     {
         SetMoney(100);
         //Debug.Log("money + 10, now: " + GetMoney());
     }
 
-    public void onClickButtonFacility(Button b)  // 재화 생산시설 구매 버튼
+    public void OnClickButtonFacility(Button b)  // 재화 생산시설 구매 버튼
     {
         int num;
         if (b.name.Length == 7)
@@ -110,45 +110,45 @@ public class UIManager : MonoBehaviour {
         {
             num = b.name[7] - '1' + 10;
         }
-        if (GetMoney() >= fac[num])
+        if (GetMoney() >= _fac[num])
         {
             Text facText = GameObject.Find("facility" + (num + 1)).GetComponentInChildren<Text>();
             // 구매 여부 확인
-            if (!fm.getIsPurchased()[num])
+            if (!fm.GetIsPurchased()[num])
             {
                 fm.newFacObj(num);
-                fm.setIsPurchased(num, true);
+                fm.SetIsPurchased(num, true);
                 facText.text = facText.text + "\nLv.1";
             }
             // 재화 소모
-            SetMoney((-1) * fac[num]);
+            SetMoney((-1) * _fac[num]);
             // 구매 가격 증가
-            fac[num] = initFac[num] * Mathf.Pow(1.13f, facLevel[num]++);
+            _fac[num] = _initFac[num] * Mathf.Pow(1.13f, _facLevel[num]++);
 
             // 텍스트 업데이트
-            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + fac[num]; // 버튼
-            facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + facLevel[num]; // 레벨
+            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + _fac[num]; // 버튼
+            facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + _facLevel[num]; // 레벨
         }
     }
-    public void onClickButtonMenu(Button b)
+    public void OnClickButtonMenu(Button b)
     {
         // 하단 메뉴 버튼
         if (b.name == "Facilities Button")
         {
             // 재화생산시설 스크롤뷰 활성화
-            UpgScroll.SetActive(false);
-            FacScroll.SetActive(true);
+            upgScroll.SetActive(false);
+            facScroll.SetActive(true);
         }
         else
         {
             // 업그레이드 스크롤뷰 활성화
-            UpgScroll.SetActive(true);
-            FacScroll.SetActive(false);
+            upgScroll.SetActive(true);
+            facScroll.SetActive(false);
         }
     }
 
     public void AutoEarn()
     {
-        SetMoney(fm.getCurrentEarn());
+        SetMoney(fm.GetCurrentEarn());
     }
 }
