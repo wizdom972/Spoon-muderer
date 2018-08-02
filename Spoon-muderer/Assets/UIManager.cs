@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
     private float _money;     // 재화
-    Text moneyText;          // 현재 재화 텍스트
-    Text earnText;           // 현재 생산 텍스트
+    private float _click;     // 클릭 당 얻는 재화
+    Text moneyText;           // 현재 재화 텍스트
+    Text earnText;            // 현재 생산 텍스트
     private int _facNum = 11; // 재화 생산 시설 개수
 
     private float[] _initFac; // 초기 재화 생산 시설 구매 비용
     private float[] _fac;     // 재화 생산 시설 업그레이드 비용
-    private int[] _facLevel;
+    private int[] _facLevel;  // 재화 생산 시설 레벨
+
+    private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
 
     GameObject facScroll, upgScroll; // 스크롤뷰 오브젝트
 
@@ -24,6 +27,7 @@ public class UIManager : MonoBehaviour {
     void Start()
     {
         _money = 0;
+        _click = 10;
 
         _fac = new float[_facNum];
         _fac[0] = 1;
@@ -55,6 +59,8 @@ public class UIManager : MonoBehaviour {
         earnText  = GameObject.Find("earning money").GetComponent<Text>();
         facScroll = GameObject.Find("Facility Scroll");
         upgScroll = GameObject.Find("Upgrade Scroll");
+        
+        _spoonLevel = 1;
 
         upgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
 
@@ -73,7 +79,7 @@ public class UIManager : MonoBehaviour {
         }
         if (earnText != null)
         {
-            earnText.text = "Earning: " + fm.GetCurrentEarn();
+            earnText.text = "Earning: " + GetCurrentEarn();
         }
         timeSpan += Time.deltaTime;
         if (timeSpan > checkTime)
@@ -95,7 +101,7 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonMoneyUP()  // 클릭 시 재화 증가
     {
-        SetMoney(100);
+        SetMoney(_click);
         //Debug.Log("money + 10, now: " + GetMoney());
     }
 
@@ -147,8 +153,41 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+    public void OnClickButtonSpoon()
+    {
+        float spoon = 50000 * Mathf.Pow(10, _spoonLevel); // 구매 시 필요한 재화
+        if (GetMoney() >= spoon)
+        {
+            SetMoney(spoon); // 재화 소모
+            _spoonLevel++;   // 스푼 레벨 증가
+
+            // 텍스트 업데이트
+            Text spoonText = GameObject.Find("spoon").GetComponentInChildren<Text>();
+            spoonText.text = "Lv. " + _spoonLevel;
+            Text spoonUpg = GameObject.Find("spoon button").GetComponentInChildren<Text>();
+            spoonUpg.text = "UPGRADE\n$" + spoon * 10;
+
+            _click *= 2;
+        }
+    }
+
+    public float GetCurrentEarn()
+    {
+        float earn = 0;
+        int count = 0;
+        for (int i = 0; i < 11; i++)
+        {
+            if (fm.GetIsPurchased()[i])
+            {
+                count++;
+                earn += fm.facEarn[i] * _facLevel[i];
+            }
+        }
+        return earn * Mathf.Pow(2, count) * 13 * Mathf.Pow(2, _spoonLevel - 1);
+    }
+
     public void AutoEarn()
     {
-        SetMoney(fm.GetCurrentEarn());
+        SetMoney(GetCurrentEarn());
     }
 }

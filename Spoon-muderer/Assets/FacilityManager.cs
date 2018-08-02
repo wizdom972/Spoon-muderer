@@ -61,17 +61,4 @@ public class FacilityManager : MonoBehaviour {
         facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
         facilities[num].gameObject.name = "Facility" + (num + 1);
     }
-
-    public float GetCurrentEarn()
-    {
-        float earn = 0;
-        for (int i = 0; i < 11; i++)
-        {
-            if (GetIsPurchased()[i])
-            {
-                earn += facEarn[i];
-            }
-        }
-        return earn;
-    }
 }
