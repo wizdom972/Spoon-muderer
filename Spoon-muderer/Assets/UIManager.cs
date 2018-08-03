@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour {
     void Start()
     {
         _money = 0;
-        _click = 10;
+        _click = 1;
 
         _fac = new float[_facNum];
         _fac[0] = 1;
@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour {
     {
         if (moneyText != null)
         {
-            moneyText.text = "Current: " + GetMoney();
+            moneyText.text = "Current: " + Mathf.Floor(GetMoney() * 100) / 100;     //소수 셋째자리에서 버림 표기
         }
         if (earnText != null)
         {
@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour {
             _fac[num] = _initFac[num] * Mathf.Pow(1.13f, _facLevel[num]++);
 
             // 텍스트 업데이트
-            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + _fac[num]; // 버튼
+            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + Mathf.Floor(_fac[num] * 100) / 100; // 버튼, 소수 셋째 자리에서 버림 표기
             facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + _facLevel[num]; // 레벨
         }
     }
