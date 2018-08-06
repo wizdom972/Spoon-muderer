@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    private Money _m;
     private float _money;     // 재화
     private float _click;     // 클릭 당 얻는 재화
     Text moneyText;           // 현재 재화 텍스트
