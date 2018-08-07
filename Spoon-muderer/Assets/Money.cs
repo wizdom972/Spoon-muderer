@@ -14,6 +14,14 @@ public class Money {
         letter2 = 'a';
     }
 
+    public Money(float n)
+    {   
+        num = n;
+        letter1 = ' ';
+        letter2 = 'a';
+        this.MoneyRule();
+    }
+
     public Money(float n, char letter)
     {
         num = n;
@@ -127,9 +135,53 @@ public class Money {
         this.MoneyRule();
     }
 
-    public void SubMoney()
+    public bool SubMoney(Money num)
     {
         // 뺄셈 구현
+        if (this.letter1 == num.letter1)
+        {
+            if (this.letter2 == num.letter2)
+            {
+                if (this.num >= num.num)
+                {
+                    this.num = this.num - num.num;
+                }
+                else
+                {
+                    Debug.Log("cannot subtract the money.");
+                    return false;
+                }
+            }
+            else if (this.letter2 > num.letter2)
+            {
+                if (this.letter2 - num.letter2 == 1)
+                {
+                    this.letter2 = (char)(this.letter2 - 1);
+                    this.num = this.num * 10000 - num.num;
+                }
+            }
+            else
+            {
+                Debug.Log("cannot subtract the money.");
+                return false;
+            }
+        }
+        else if (this.letter1 > num.letter1)
+        {
+            if ((this.letter1 - num.letter1 == 1 || (this.letter1 == 'A' && num.letter1 == ' ')) && (this.letter2 == 'a' && num.letter2 == 'z'))
+            {
+                this.letter1 = num.letter1;
+                this.letter2 = 'z';
+                this.num = this.num * 10000 - num.num;
+            }
+        }
+        else
+        {
+            Debug.Log("cannot subtract the money.");
+            return false;
+        }
+        this.MoneyRule();
+        return true;
     }
 
     public void Print()
