@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-    private Money _m;
-    private float _money;     // 재화
-    private float _click;     // 클릭 당 얻는 재화
+    private Money _money;
+    private float _m;     // 재화
+    private Money _click;
+    private float _c;     // 클릭 당 얻는 재화
     Text moneyText;           // 현재 재화 텍스트
     Text earnText;            // 현재 생산 텍스트
-    private int _facNum = 11; // 재화 생산 시설 개수
+    private int _facNum; // 재화 생산 시설 개수
 
-    private float[] _initFac; // 초기 재화 생산 시설 구매 비용
-    private float[] _fac;     // 재화 생산 시설 업그레이드 비용
+    private List<Money> _initFac;
+    private List<Money> _fac;
+
+    private float[] _initF; // 초기 재화 생산 시설 구매 비용
+    private float[] _f;     // 재화 생산 시설 업그레이드 비용
     private int[] _facLevel;  // 재화 생산 시설 레벨
 
     private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
@@ -27,9 +31,25 @@ public class UIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        _money = 0;
-        _click = 1;
+        _money = new Money();
 
+        //_m = 0;
+        _click = new Money(1);
+
+        _fac = new List<Money>();
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(100));
+        _fac.Add(new Money(500));
+        _fac.Add(new Money(3000));
+        _fac.Add(new Money(10000));
+        _fac.Add(new Money(40000));
+        _fac.Add(new Money(200000));
+        _fac.Add(new Money(1700000));
+        _fac.Add(new Money(123456789));
+        _fac.Add(new Money(4000000000));
+        _fac.Add(new Money(75000000000));
+        _facNum = _fac.Count;
+        /*
         _fac = new float[_facNum];
         _fac[0] = 1;
         _fac[1] = 100;
@@ -41,12 +61,13 @@ public class UIManager : MonoBehaviour {
         _fac[7] = 1700000;
         _fac[8] = 123456789;
         _fac[9] = 4000000000;
-        _fac[10] = 75000000000;
+        _fac[10] = 75000000000;*/
 
-        _initFac = new float[_facNum];
+        _initFac = new List<Money>();
+        //_initFac = new float[_facNum];
         for (int i = 0; i < _facNum; i++)
         {
-            _initFac[i] = _fac[i];
+            _initFac.Add(_fac[i]);
         }
 
         _facLevel = new int[_facNum];
@@ -76,11 +97,11 @@ public class UIManager : MonoBehaviour {
     {
         if (moneyText != null)
         {
-            moneyText.text = "Current: " + Mathf.Floor(GetMoney() * 100) / 100;     //소수 셋째자리에서 버림 표기
+            moneyText.text = "Current: " + GetMoney().Print();     //소수 셋째자리에서 버림 표기
         }
         if (earnText != null)
         {
-            earnText.text = "Earning: " + GetCurrentEarn();
+            earnText.text = "Earning: " + GetCurrentEarn().Print();
         }
         timeSpan += Time.deltaTime;
         if (timeSpan > checkTime)
@@ -90,19 +111,29 @@ public class UIManager : MonoBehaviour {
         }
 	}
 
-    public float GetMoney()   // 재화 반환
+    public Money GetMoney()   // 재화 반환
     {
         return _money;
     }
     
-    public void SetMoney(float extra)  // 재화 수정
+    public void SetMoney(Money extra, bool add)  // 재화 수정
     {
-        _money = GetMoney() + extra;
+        if (add)
+        {
+            GetMoney().AddMoney(extra);
+        }
+        else
+        {
+            if (GetMoney().IsBiggerThan(extra))
+            {
+                GetMoney().SubMoney(extra);
+            }
+        }
     }
 
     public void OnClickButtonMoneyUP()  // 클릭 시 재화 증가
     {
-        SetMoney(_click);
+        SetMoney(_click, true);
         //Debug.Log("money + 10, now: " + GetMoney());
     }
 
@@ -117,7 +148,7 @@ public class UIManager : MonoBehaviour {
         {
             num = b.name[7] - '1' + 10;
         }
-        if (GetMoney() >= _fac[num])
+        if (GetMoney().IsBiggerThan(_fac[num]))
         {
             Text facText = GameObject.Find("facility" + (num + 1)).GetComponentInChildren<Text>();
             // 구매 여부 확인
@@ -128,12 +159,12 @@ public class UIManager : MonoBehaviour {
                 facText.text = facText.text + "\nLv.1";
             }
             // 재화 소모
-            SetMoney((-1) * _fac[num]);
+            SetMoney(_fac[num], false);
             // 구매 가격 증가
-            _fac[num] = _initFac[num] * Mathf.Pow(1.13f, _facLevel[num]++);
+            _fac[num] = new Money(_initFac[num].num * Mathf.Pow(1.13f, _facLevel[num]++), _initFac[num].letter1, _initFac[num].letter2);
 
             // 텍스트 업데이트
-            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + Mathf.Floor(_fac[num] * 100) / 100; // 버튼, 소수 셋째 자리에서 버림 표기
+            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + _fac[num].Print(); // 버튼, 소수 셋째 자리에서 버림 표기
             facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + _facLevel[num]; // 레벨
         }
     }
@@ -156,39 +187,48 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonSpoon()
     {
-        float spoon = 50000 * Mathf.Pow(10, _spoonLevel); // 구매 시 필요한 재화
-        if (GetMoney() >= spoon)
+        Money spoon = new Money(50000 * Mathf.Pow(10, _spoonLevel)); // 구매 시 필요한 재화
+        if (GetMoney().IsBiggerThan(spoon))
         {
-            SetMoney(spoon); // 재화 소모
+            SetMoney(spoon, false); // 재화 소모
             _spoonLevel++;   // 스푼 레벨 증가
 
             // 텍스트 업데이트
             Text spoonText = GameObject.Find("spoon").GetComponentInChildren<Text>();
             spoonText.text = "Lv. " + _spoonLevel;
             Text spoonUpg = GameObject.Find("spoon button").GetComponentInChildren<Text>();
-            spoonUpg.text = "UPGRADE\n$" + spoon * 10;
+            spoon.num = spoon.num * 10;
+            spoon.MoneyRule();
+            spoonUpg.text = "UPGRADE\n$" + spoon.Print();
 
-            _click *= 2;
+            _click.num = _click.num * 2;
+            _click.MoneyRule();
         }
     }
 
-    public float GetCurrentEarn()
+    public Money GetCurrentEarn()
     {
-        float earn = 0;
+        Money earn = new Money();
         int count = 0;
         for (int i = 0; i < 11; i++)
         {
             if (fm.GetIsPurchased()[i])
             {
                 count++;
-                earn += fm.facEarn[i] * _facLevel[i];
+                earn.AddMoney(new Money(fm.facEarn[i] * _facLevel[i]));
             }
         }
-        return earn * Mathf.Pow(2, count) * 13 * Mathf.Pow(2, _spoonLevel - 1);
+        earn.num = earn.num * Mathf.Pow(2, count);
+        earn.MoneyRule();
+        earn.num = earn.num * 13;
+        earn.MoneyRule();
+        earn.num = earn.num * Mathf.Pow(2, _spoonLevel - 1);
+        earn.MoneyRule();
+        return earn;
     }
 
     public void AutoEarn()
     {
-        SetMoney(GetCurrentEarn());
+        SetMoney(GetCurrentEarn(), true);
     }
 }

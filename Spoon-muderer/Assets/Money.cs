@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Money {
 
-    float num;
-    char letter1, letter2;
+    public float num;
+    public char letter1, letter2;
 
     public Money()
     {
@@ -38,7 +38,7 @@ public class Money {
 
     public void MoneyRule()
     {
-        if (num >= 10000)
+        while (num >= 10000)
         {
             if (letter2 == 'z')
             {
@@ -184,8 +184,30 @@ public class Money {
         return true;
     }
 
-    public void Print()
+    public string Print()
     {
-        Debug.Log(this.num + "" + this.letter1 + "" + this.letter2);
+        return ((Mathf.Floor(this.num * 100) / 100).ToString() + this.letter1) + this.letter2;
+    }
+
+    public bool IsBiggerThan(Money money)
+    {
+        if (this.letter1 > money.letter1)
+            return true;
+        else if (this.letter1 < money.letter1)
+            return false;
+        else
+        {
+            if (this.letter2 > money.letter2)
+                return true;
+            else if (this.letter2 < money.letter2)
+                return false;
+            else
+            {
+                if (this.num >= money.num)
+                    return true;
+                else
+                    return false;
+            }
+        }
     }
 }
