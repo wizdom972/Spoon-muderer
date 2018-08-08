@@ -5,35 +5,35 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-    private Money _money;
-    private float _m;     // 재화
-    private Money _click;
-    private float _c;     // 클릭 당 얻는 재화
+    private Money _money;     // 재화
+    private Money _click;     // 클릭 당 얻는 재화
     Text moneyText;           // 현재 재화 텍스트
     Text earnText;            // 현재 생산 텍스트
-    private int _facNum; // 재화 생산 시설 개수
+    private int _facNum;      // 재화 생산 시설 개수
 
-    private List<Money> _initFac;
-    private List<Money> _fac;
-
-    private float[] _initF; // 초기 재화 생산 시설 구매 비용
-    private float[] _f;     // 재화 생산 시설 업그레이드 비용
-    private int[] _facLevel;  // 재화 생산 시설 레벨
+    private List<Money> _initFac;    // 초기 재화 생산 시설 구매 비용
+    private List<Money> _fac;        // 재화 생산 시설 업그레이드 비용
+    
+    private int[] _facLevel;   // 재화 생산 시설 레벨
 
     private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
+
+    private int _feverClick;
+    private int _feverLevel;
+    private bool _isFeverTime;
+
+    GameObject fever; // 피버 오브젝트
 
     GameObject facScroll, upgScroll; // 스크롤뷰 오브젝트
 
     FacilityManager fm;
 
-    float timeSpan, checkTime;
+    float timeSpan, checkTime, timeFever;
 
     // Use this for initialization
     void Start()
     {
         _money = new Money();
-
-        //_m = 0;
         _click = new Money(1);
 
         _fac = new List<Money>();
@@ -49,22 +49,8 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(4000000000));
         _fac.Add(new Money(75000000000));
         _facNum = _fac.Count;
-        /*
-        _fac = new float[_facNum];
-        _fac[0] = 1;
-        _fac[1] = 100;
-        _fac[2] = 500;
-        _fac[3] = 3000;
-        _fac[4] = 10000;
-        _fac[5] = 40000;
-        _fac[6] = 200000;
-        _fac[7] = 1700000;
-        _fac[8] = 123456789;
-        _fac[9] = 4000000000;
-        _fac[10] = 75000000000;*/
 
         _initFac = new List<Money>();
-        //_initFac = new float[_facNum];
         for (int i = 0; i < _facNum; i++)
         {
             _initFac.Add(_fac[i]);
@@ -84,12 +70,20 @@ public class UIManager : MonoBehaviour {
         
         _spoonLevel = 1;
 
+        _feverClick = 1;
+        _feverLevel = 1;
+        _isFeverTime = false;
+
         upgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
+
+        fever = GameObject.Find("Fever");
+        fever.SetActive(false);
 
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
         timeSpan = 0.0f;
         checkTime = 1.0f;
+        timeFever = 0.0f;
     }
 	
 	// Update is called once per frame
@@ -97,7 +91,7 @@ public class UIManager : MonoBehaviour {
     {
         if (moneyText != null)
         {
-            moneyText.text = "Current: " + GetMoney().Print();     //소수 셋째자리에서 버림 표기
+            moneyText.text = "Current: " + GetMoney().Print();     
         }
         if (earnText != null)
         {
@@ -107,7 +101,29 @@ public class UIManager : MonoBehaviour {
         if (timeSpan > checkTime)
         {
             AutoEarn();
+            AutoFever(_isFeverTime);
             timeSpan = 0;
+        }
+
+        // fever time
+        if (_isFeverTime)
+        {
+            Debug.Log("FEVER!!! " + _feverClick);
+            timeFever += Time.deltaTime;
+            float duration = 5 * Mathf.Pow(1.07f, _feverLevel);
+            fever.SetActive(_isFeverTime);
+            if (timeFever > duration)
+            {
+                Debug.Log("Fever Time End in " + timeFever);
+                timeFever = 0;
+                _feverClick = 0;
+                fever.SetActive(false);
+                _isFeverTime = false;
+            }
+        }
+        else
+        {
+            FeverTime();
         }
 	}
 
@@ -120,10 +136,12 @@ public class UIManager : MonoBehaviour {
     {
         if (add)
         {
+            // 덧셈
             GetMoney().AddMoney(extra);
         }
         else
         {
+            // extra가 재화보다 작을 경우 뺄셈
             if (GetMoney().IsBiggerThan(extra))
             {
                 GetMoney().SubMoney(extra);
@@ -134,6 +152,7 @@ public class UIManager : MonoBehaviour {
     public void OnClickButtonMoneyUP()  // 클릭 시 재화 증가
     {
         SetMoney(_click, true);
+        _feverClick++;
         //Debug.Log("money + 10, now: " + GetMoney());
     }
 
@@ -187,6 +206,7 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonSpoon()
     {
+        // Spoon 업그레이드
         Money spoon = new Money(50000 * Mathf.Pow(10, _spoonLevel)); // 구매 시 필요한 재화
         if (GetMoney().IsBiggerThan(spoon))
         {
@@ -203,6 +223,20 @@ public class UIManager : MonoBehaviour {
 
             _click.num = _click.num * 2;
             _click.MoneyRule();
+        }
+    }
+
+    public void OnClickButtonFever()
+    {
+        // fever 업그레이드
+        _feverLevel++;
+    }
+
+    public void FeverTime()
+    {
+        if (_feverClick > (1000 * Mathf.Pow(0.89f, _feverLevel)))
+        {
+            _isFeverTime = true;
         }
     }
 
@@ -230,5 +264,13 @@ public class UIManager : MonoBehaviour {
     public void AutoEarn()
     {
         SetMoney(GetCurrentEarn(), true);
+    }
+    
+    public void AutoFever(bool isFever)
+    {
+        if (isFever)
+        {
+            SetMoney(GetCurrentEarn(), true);
+        }
     }
 }

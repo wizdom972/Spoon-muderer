@@ -186,6 +186,7 @@ public class Money {
 
     public string Print()
     {
+        //소수 셋째자리에서 버림 표기
         return ((Mathf.Floor(this.num * 100) / 100).ToString() + this.letter1) + this.letter2;
     }
 
