@@ -18,9 +18,9 @@ public class UIManager : MonoBehaviour {
 
     private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
 
-    private int _feverClick;
-    private int _feverLevel;
-    private bool _isFeverTime;
+    private int _feverClick, _feverLevel;
+    private bool _isFeverTime, _hasSetFever;
+    private Money feverTmp;
 
     GameObject fever; // 피버 오브젝트
 
@@ -73,6 +73,7 @@ public class UIManager : MonoBehaviour {
         _feverClick = 1;
         _feverLevel = 1;
         _isFeverTime = false;
+        _hasSetFever = false;
 
         upgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
 
@@ -101,14 +102,20 @@ public class UIManager : MonoBehaviour {
         if (timeSpan > checkTime)
         {
             AutoEarn();
-            AutoFever(_isFeverTime);
             timeSpan = 0;
         }
 
         // fever time
         if (_isFeverTime)
         {
-            Debug.Log("FEVER!!! " + _feverClick);
+            //Debug.Log("FEVER!!! " + _feverClick);
+            if (!_hasSetFever)
+            {
+                feverTmp = new Money(_click);
+                _click.num *= 2;
+                _click.MoneyRule();
+                _hasSetFever = true;
+            }
             timeFever += Time.deltaTime;
             float duration = 5 * Mathf.Pow(1.07f, _feverLevel);
             fever.SetActive(_isFeverTime);
@@ -117,6 +124,7 @@ public class UIManager : MonoBehaviour {
                 Debug.Log("Fever Time End in " + timeFever);
                 timeFever = 0;
                 _feverClick = 0;
+                _click = new Money(feverTmp);
                 fever.SetActive(false);
                 _isFeverTime = false;
             }
@@ -264,13 +272,5 @@ public class UIManager : MonoBehaviour {
     public void AutoEarn()
     {
         SetMoney(GetCurrentEarn(), true);
-    }
-    
-    public void AutoFever(bool isFever)
-    {
-        if (isFever)
-        {
-            SetMoney(GetCurrentEarn(), true);
-        }
     }
 }

@@ -36,6 +36,13 @@ public class Money {
         letter2 = l2;
     }
 
+    public Money(Money m)
+    {
+        num = m.num;
+        letter1 = m.letter1;
+        letter2 = m.letter2;
+    }
+
     public void MoneyRule()
     {
         while (num >= 10000)
