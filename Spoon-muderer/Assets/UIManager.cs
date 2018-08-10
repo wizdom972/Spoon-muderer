@@ -22,12 +22,13 @@ public class UIManager : MonoBehaviour {
     private bool _isFeverTime, _hasSetFever;
     private Money feverTmp;
 
-    GameObject fever; // 피버 오브젝트
+    GameObject fever, feverBar; // 피버 오브젝트
 
-    GameObject facScroll, upgScroll; // 스크롤뷰 오브젝트
+    GameObject facScroll, cliScroll, fevScroll, spoScroll; // 스크롤뷰 오브젝트
 
     FacilityManager fm;
 
+    float delta;
     float timeSpan, checkTime, timeFever;
 
     // Use this for initialization
@@ -63,10 +64,12 @@ public class UIManager : MonoBehaviour {
         }
         _facLevel[0] = 1;
 
-        moneyText = GameObject.Find("current money").GetComponent<Text>();
-        earnText  = GameObject.Find("earning money").GetComponent<Text>();
+        moneyText = GameObject.Find("Current Money").GetComponent<Text>();
+        earnText  = GameObject.Find("Earning Money").GetComponent<Text>();
         facScroll = GameObject.Find("Facility Scroll");
-        upgScroll = GameObject.Find("Upgrade Scroll");
+        cliScroll = GameObject.Find("Click Scroll");
+        fevScroll = GameObject.Find("Fever Scroll");
+        spoScroll = GameObject.Find("Spoon Scroll");
         
         _spoonLevel = 1;
 
@@ -75,13 +78,19 @@ public class UIManager : MonoBehaviour {
         _isFeverTime = false;
         _hasSetFever = false;
 
-        upgScroll.SetActive(false); // 업그레이드 스크롤뷰 비활성화
+        // 스크롤뷰 비활성화
+        cliScroll.SetActive(false);
+        fevScroll.SetActive(false);
+        spoScroll.SetActive(false);
 
-        fever = GameObject.Find("Fever");
+        fever = GameObject.Find("Fever Image");
         fever.SetActive(false);
+        feverBar = GameObject.Find("Fever Bar");
 
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
+
+        delta = (1 / (1000 * Mathf.Pow(0.89f, _feverLevel))) * 768;
         timeSpan = 0.0f;
         checkTime = 1.0f;
         timeFever = 0.0f;
@@ -122,6 +131,7 @@ public class UIManager : MonoBehaviour {
             if (timeFever > duration)
             {
                 Debug.Log("Fever Time End in " + timeFever);
+                feverBar.transform.position = new Vector3(384, feverBar.transform.position.y, feverBar.transform.position.z);
                 timeFever = 0;
                 _feverClick = 0;
                 _click = new Money(feverTmp);
@@ -161,7 +171,45 @@ public class UIManager : MonoBehaviour {
     {
         SetMoney(_click, true);
         _feverClick++;
+        feverBar.transform.position = new Vector3(feverBar.transform.position.x + delta, feverBar.transform.position.y, feverBar.transform.position.z);
         //Debug.Log("money + 10, now: " + GetMoney());
+    }
+
+    public void OnClickButtonMenu(Button b)
+    {
+        // 하단 메뉴 버튼
+        if (b.name == "Facilities Button")
+        {
+            // 재화생산시설 스크롤뷰 활성화
+            facScroll.SetActive(true);
+            cliScroll.SetActive(false);
+            fevScroll.SetActive(false);
+            spoScroll.SetActive(false);
+        }
+        else if (b.name == "Click Button")
+        {
+            // 클릭 스크롤뷰 활성화
+            facScroll.SetActive(false);
+            cliScroll.SetActive(true);
+            fevScroll.SetActive(false);
+            spoScroll.SetActive(false);
+        }
+        else if (b.name == "Fever Button")
+        {
+            // 피버 스크롤뷰 활성화
+            facScroll.SetActive(false);
+            cliScroll.SetActive(false);
+            fevScroll.SetActive(true);
+            spoScroll.SetActive(false);
+        }
+        else if (b.name == "Spoon Button")
+        {
+            // 스푼 스크롤뷰 활성화
+            facScroll.SetActive(false);
+            cliScroll.SetActive(false);
+            fevScroll.SetActive(false);
+            spoScroll.SetActive(true);
+        }
     }
 
     public void OnClickButtonFacility(Button b)  // 재화 생산시설 구매 버튼
@@ -189,27 +237,24 @@ public class UIManager : MonoBehaviour {
             SetMoney(_fac[num], false);
             // 구매 가격 증가
             _fac[num] = new Money(_initFac[num].num * Mathf.Pow(1.13f, _facLevel[num]++), _initFac[num].letter1, _initFac[num].letter2);
+            _fac[num].MoneyRule();
 
             // 텍스트 업데이트
             b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + _fac[num].Print(); // 버튼, 소수 셋째 자리에서 버림 표기
             facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + _facLevel[num]; // 레벨
         }
     }
-    public void OnClickButtonMenu(Button b)
+
+    public void OnClickButtonClick()
     {
-        // 하단 메뉴 버튼
-        if (b.name == "Facilities Button")
-        {
-            // 재화생산시설 스크롤뷰 활성화
-            upgScroll.SetActive(false);
-            facScroll.SetActive(true);
-        }
-        else
-        {
-            // 업그레이드 스크롤뷰 활성화
-            upgScroll.SetActive(true);
-            facScroll.SetActive(false);
-        }
+
+    }
+
+    public void OnClickButtonFever()
+    {
+        // fever 업그레이드
+        _feverLevel++;
+        delta = (1 / (1000 * Mathf.Pow(0.89f, _feverLevel))) * 768;
     }
 
     public void OnClickButtonSpoon()
@@ -222,22 +267,17 @@ public class UIManager : MonoBehaviour {
             _spoonLevel++;   // 스푼 레벨 증가
 
             // 텍스트 업데이트
-            Text spoonText = GameObject.Find("spoon").GetComponentInChildren<Text>();
+            Text spoonText = GameObject.Find("Spoon").GetComponentInChildren<Text>();
             spoonText.text = "Lv. " + _spoonLevel;
-            Text spoonUpg = GameObject.Find("spoon button").GetComponentInChildren<Text>();
+            Text spoonUpg = GameObject.Find("Spoon Upgrade").GetComponentInChildren<Text>();
             spoon.num = spoon.num * 10;
             spoon.MoneyRule();
+            Debug.Log(spoon.Print());
             spoonUpg.text = "UPGRADE\n$" + spoon.Print();
 
             _click.num = _click.num * 2;
             _click.MoneyRule();
         }
-    }
-
-    public void OnClickButtonFever()
-    {
-        // fever 업그레이드
-        _feverLevel++;
     }
 
     public void FeverTime()
