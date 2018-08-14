@@ -18,11 +18,11 @@ public class UIManager : MonoBehaviour {
 
     private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
 
-    private int _feverClick, _feverLevel;
+    private int _currentClick, _feverClick, _feverLevel;
     private bool _isFeverTime, _hasSetFever;
     private Money feverTmp;
 
-    GameObject fever, feverBar; // 피버 오브젝트
+    GameObject fever, feverBar, feverText; // 피버 오브젝트
 
     GameObject facScroll, cliScroll, fevScroll, spoScroll; // 스크롤뷰 오브젝트
 
@@ -73,8 +73,9 @@ public class UIManager : MonoBehaviour {
         
         _spoonLevel = 1;
 
-        _feverClick = 1;
+        _currentClick = 0;
         _feverLevel = 1;
+        _feverClick = (int) (100 * Mathf.Pow(0.89f, _feverLevel)) + 1;
         _isFeverTime = false;
         _hasSetFever = false;
 
@@ -86,11 +87,13 @@ public class UIManager : MonoBehaviour {
         fever = GameObject.Find("Fever Image");
         fever.SetActive(false);
         feverBar = GameObject.Find("Fever Bar");
+        feverText = GameObject.Find("Fever Text");
+        feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
 
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
 
-        delta = (1 / (1000 * Mathf.Pow(0.89f, _feverLevel))) * 768;
+        delta = (1 / _feverClick) * 768;
         timeSpan = 0.0f;
         checkTime = 1.0f;
         timeFever = 0.0f;
@@ -118,6 +121,7 @@ public class UIManager : MonoBehaviour {
         if (_isFeverTime)
         {
             //Debug.Log("FEVER!!! " + _feverClick);
+            feverText.GetComponent<Text>().text = "";
             if (!_hasSetFever)
             {
                 feverTmp = new Money(_click);
@@ -133,8 +137,9 @@ public class UIManager : MonoBehaviour {
                 Debug.Log("Fever Time End in " + timeFever);
                 feverBar.transform.position = new Vector3(384, feverBar.transform.position.y, feverBar.transform.position.z);
                 timeFever = 0;
-                _feverClick = 0;
+                _currentClick = 0;
                 _click = new Money(feverTmp);
+                feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
                 fever.SetActive(false);
                 _isFeverTime = false;
             }
@@ -170,9 +175,10 @@ public class UIManager : MonoBehaviour {
     public void OnClickButtonMoneyUP()  // 클릭 시 재화 증가
     {
         SetMoney(_click, true);
-        _feverClick++;
+        _currentClick++;
         feverBar.transform.position = new Vector3(feverBar.transform.position.x + delta, feverBar.transform.position.y, feverBar.transform.position.z);
         //Debug.Log("money + 10, now: " + GetMoney());
+        feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
     }
 
     public void OnClickButtonMenu(Button b)
@@ -254,7 +260,8 @@ public class UIManager : MonoBehaviour {
     {
         // fever 업그레이드
         _feverLevel++;
-        delta = (1 / (1000 * Mathf.Pow(0.89f, _feverLevel))) * 768;
+        delta = (1 / _feverClick) * 768;
+        _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
     }
 
     public void OnClickButtonSpoon()
@@ -282,7 +289,7 @@ public class UIManager : MonoBehaviour {
 
     public void FeverTime()
     {
-        if (_feverClick > (1000 * Mathf.Pow(0.89f, _feverLevel)))
+        if (_currentClick >= _feverClick)
         {
             _isFeverTime = true;
         }
