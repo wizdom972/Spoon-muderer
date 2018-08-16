@@ -5,6 +5,8 @@ using UnityEngine;
 public class FacilityManager : MonoBehaviour {
 
     public GameObject facObj;
+    public SoundManager soundManager;
+    public AudioSource mainBGM;
     //public int facNum;
 
     public GameObject[] facilities;
@@ -17,6 +19,8 @@ public class FacilityManager : MonoBehaviour {
         //facNum = 0;
 
         facilities = new GameObject[11];
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        mainBGM = GameObject.Find("Facility1").GetComponent<AudioSource>();
 
         isPurchased = new bool[11];
         for (int i = 0; i < 11; i++)
@@ -60,5 +64,32 @@ public class FacilityManager : MonoBehaviour {
         facilities[num] = Instantiate(facObj, new Vector3(63.5f + 64 * num, 800, 0), Quaternion.identity);
         facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
         facilities[num].gameObject.name = "Facility" + (num + 1);
+        AudioSource facAud = facilities[num].GetComponentInChildren<AudioSource>();
+        switch (num)
+        {
+            case 1:
+                facAud.clip = (soundManager.audio01);
+                break;
+            case 2:
+                facAud.clip = (soundManager.audio02);
+                break;
+            case 3:
+                facAud.clip = (soundManager.audio03);
+                break;
+            case 4:
+                facAud.clip = (soundManager.audio04);
+                break;
+            case 5:
+                facAud.clip = (soundManager.audio05);
+                break;
+            case 6:
+                facAud.clip = (soundManager.audio06);
+                break;
+            case 7:
+                facAud.clip = (soundManager.audio07);
+                break;
+        }
+        facAud.timeSamples = (mainBGM.timeSamples);
+        facAud.Play();
     }
 }
