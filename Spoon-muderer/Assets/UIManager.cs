@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour {
     
     private int[] _facLevel;   // 재화 생산 시설 레벨
 
-    private float _spoonLevel; // 스푼 업그레이드 비용, 스푼 레벨
+    private float _clickLevel, _spoonLevel; // 클릭 업그레이드 레벨, 스푼 레벨
 
     private int _currentClick, _feverClick, _feverLevel;
     private bool _isFeverTime, _hasSetFever;
@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour {
 
     FacilityManager fm;
 
-    float delta;
+    double delta;
     float timeSpan, checkTime, timeFever;
 
     // Use this for initialization
@@ -38,17 +38,17 @@ public class UIManager : MonoBehaviour {
         _click = new Money(1);
 
         _fac = new List<Money>();
-        _fac.Add(new Money(1));
         _fac.Add(new Money(100));
         _fac.Add(new Money(500));
-        _fac.Add(new Money(3000));
-        _fac.Add(new Money(10000));
-        _fac.Add(new Money(40000));
-        _fac.Add(new Money(200000));
-        _fac.Add(new Money(1700000));
-        _fac.Add(new Money(123456789));
-        _fac.Add(new Money(4000000000));
-        _fac.Add(new Money(75000000000));
+        _fac.Add(new Money(1, 'b'));
+        _fac.Add(new Money(50, 'b'));
+        _fac.Add(new Money(432, 'b'));
+        _fac.Add(new Money(3200, 'b'));
+        _fac.Add(new Money(1.54f, 'c'));
+        _fac.Add(new Money(22, 'c'));
+        _fac.Add(new Money(300, 'c'));
+        _fac.Add(new Money(8412, 'c'));
+        _fac.Add(new Money(20.18f, 'd'));
         _facNum = _fac.Count;
 
         _initFac = new List<Money>();
@@ -70,12 +70,13 @@ public class UIManager : MonoBehaviour {
         cliScroll = GameObject.Find("Click Scroll");
         fevScroll = GameObject.Find("Fever Scroll");
         spoScroll = GameObject.Find("Spoon Scroll");
-        
+
+        _clickLevel = 1;
         _spoonLevel = 1;
 
         _currentClick = 0;
         _feverLevel = 1;
-        _feverClick = (int) (100 * Mathf.Pow(0.89f, _feverLevel)) + 1;
+        _feverClick = (int) (1000 * Mathf.Pow(0.89f, _feverLevel)) + 1;
         _isFeverTime = false;
         _hasSetFever = false;
 
@@ -125,7 +126,7 @@ public class UIManager : MonoBehaviour {
             if (!_hasSetFever)
             {
                 feverTmp = new Money(_click);
-                _click.num *= 2;
+                _click.num *= 10;
                 _click.MoneyRule();
                 _hasSetFever = true;
             }
@@ -139,8 +140,10 @@ public class UIManager : MonoBehaviour {
                 timeFever = 0;
                 _currentClick = 0;
                 _click = new Money(feverTmp);
+                feverTmp = null;
                 feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
                 fever.SetActive(false);
+                _hasSetFever = false;
                 _isFeverTime = false;
             }
         }
@@ -176,7 +179,7 @@ public class UIManager : MonoBehaviour {
     {
         SetMoney(_click, true);
         _currentClick++;
-        feverBar.transform.position = new Vector3(feverBar.transform.position.x + delta, feverBar.transform.position.y, feverBar.transform.position.z);
+        feverBar.transform.position = new Vector3((float)(feverBar.transform.position.x + delta), feverBar.transform.position.y, feverBar.transform.position.z);
         //Debug.Log("money + 10, now: " + GetMoney());
         feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
     }
@@ -253,7 +256,25 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonClick()
     {
+        // Click 업그레이드
+        Money click = new Money(243 * Mathf.Pow(2.5f, _clickLevel)); // 구매 시 필요한 재화
+        if (GetMoney().IsBiggerThan(click))
+        {
+            SetMoney(click, false); // 재화 소모
+            _clickLevel++;   // 스푼 레벨 증가
 
+            // 텍스트 업데이트
+            Text clickText = GameObject.Find("Click").GetComponentInChildren<Text>();
+            clickText.text = "Lv. " + _clickLevel;
+            Text clickUpg = GameObject.Find("Click Upgrade").GetComponentInChildren<Text>();
+            click.num = click.num * 2.5f;
+            click.MoneyRule();
+            clickUpg.text = "UPGRADE\n$" + click.Print();
+
+            _click.num = _click.num * 2.5f;
+            _click.MoneyRule();
+            Debug.Log(_click.Print());
+        }
     }
 
     public void OnClickButtonFever()
@@ -279,11 +300,11 @@ public class UIManager : MonoBehaviour {
             Text spoonUpg = GameObject.Find("Spoon Upgrade").GetComponentInChildren<Text>();
             spoon.num = spoon.num * 10;
             spoon.MoneyRule();
-            Debug.Log(spoon.Print());
             spoonUpg.text = "UPGRADE\n$" + spoon.Print();
 
-            _click.num = _click.num * 2;
-            _click.MoneyRule();
+            _click.num = _click.num * 4;
+            _click.MoneyRule(); 
+            Debug.Log(_click.Print());
         }
     }
 
@@ -307,7 +328,7 @@ public class UIManager : MonoBehaviour {
                 earn.AddMoney(new Money(fm.facEarn[i] * _facLevel[i]));
             }
         }
-        earn.num = earn.num * Mathf.Pow(2, count);
+        earn.num = earn.num * Mathf.Pow(1.5f, count);
         earn.MoneyRule();
         earn.num = earn.num * 13;
         earn.MoneyRule();
