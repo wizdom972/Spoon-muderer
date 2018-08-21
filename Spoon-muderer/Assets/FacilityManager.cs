@@ -61,6 +61,8 @@ public class FacilityManager : MonoBehaviour {
 
     public void newFacObj(int num)
     {
+        int width = UIManager.i_width;
+        int height = UIManager.i_height;
         facilities[num] = Instantiate(facObj, new Vector3(63.5f + 64 * num, 800, 0), Quaternion.identity);
         facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
         facilities[num].gameObject.name = "Facility" + (num + 1);

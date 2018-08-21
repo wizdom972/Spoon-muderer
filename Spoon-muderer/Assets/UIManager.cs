@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+
+    public static int i_width, i_height;
+
     private Money _money;     // 재화
     private Money _click;     // 클릭 당 얻는 재화
     Text moneyText;           // 현재 재화 텍스트
@@ -34,6 +37,10 @@ public class UIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+        i_width = Screen.width;
+        i_height = Screen.height;
+
         _money = new Money();
         _click = new Money(1);
 
@@ -94,11 +101,14 @@ public class UIManager : MonoBehaviour {
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
         Debug.Log("have to click " + _feverClick + " times");
-        delta = (768 / (float)_feverClick);
+        delta = (i_width / (float)_feverClick);
         Debug.Log("delta: " + delta);
         timeSpan = 0.0f;
         checkTime = 1.0f;
         timeFever = 0.0f;
+
+        i_width = Screen.width;
+        i_height = Screen.height;
     }
 	
 	// Update is called once per frame
@@ -137,7 +147,7 @@ public class UIManager : MonoBehaviour {
             if (timeFever > duration)
             {
                 Debug.Log("Fever Time End in " + timeFever);
-                feverBar.transform.position = new Vector3(384, feverBar.transform.position.y, feverBar.transform.position.z);
+                feverBar.transform.position = new Vector3(i_width / 2, feverBar.transform.position.y, feverBar.transform.position.z);
                 timeFever = 0;
                 _currentClick = 0;
                 _click = new Money(feverTmp);
@@ -182,8 +192,8 @@ public class UIManager : MonoBehaviour {
         _currentClick++;
         feverBar.transform.position = new Vector3((float)(feverBar.transform.position.x + delta), feverBar.transform.position.y, feverBar.transform.position.z);
         //Debug.Log("money + 10, now: " + GetMoney());
-        Debug.Log("delta: " + delta);
-        Debug.Log("fever: " + feverBar.transform.position);
+        //Debug.Log("delta: " + delta);
+        //Debug.Log("fever: " + feverBar.transform.position);
         feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
     }
 
@@ -289,7 +299,7 @@ public class UIManager : MonoBehaviour {
             SetMoney(fever, false);
             _feverLevel++;
 
-            delta = (1 / _feverClick) * 768;
+            delta = (1 / _feverClick) * i_width;
             _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
 
             Text feverText = GameObject.Find("Fever").GetComponentInChildren<Text>();
