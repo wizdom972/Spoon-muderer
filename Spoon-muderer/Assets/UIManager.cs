@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour {
 
     FacilityManager fm;
 
-    double delta;
+    float delta;
     float timeSpan, checkTime, timeFever;
 
     // Use this for initialization
@@ -93,8 +93,9 @@ public class UIManager : MonoBehaviour {
 
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
-
-        delta = (1 / _feverClick) * 768;
+        Debug.Log("have to click " + _feverClick + " times");
+        delta = (768 / (float)_feverClick);
+        Debug.Log("delta: " + delta);
         timeSpan = 0.0f;
         checkTime = 1.0f;
         timeFever = 0.0f;
@@ -181,6 +182,8 @@ public class UIManager : MonoBehaviour {
         _currentClick++;
         feverBar.transform.position = new Vector3((float)(feverBar.transform.position.x + delta), feverBar.transform.position.y, feverBar.transform.position.z);
         //Debug.Log("money + 10, now: " + GetMoney());
+        Debug.Log("delta: " + delta);
+        Debug.Log("fever: " + feverBar.transform.position);
         feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
     }
 
@@ -279,10 +282,23 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonFever()
     {
+        Money fever = new Money(10 * Mathf.Pow(10000, _feverLevel));
         // fever 업그레이드
-        _feverLevel++;
-        delta = (1 / _feverClick) * 768;
-        _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
+        if (GetMoney().IsBiggerThan(fever))
+        {
+            SetMoney(fever, false);
+            _feverLevel++;
+
+            delta = (1 / _feverClick) * 768;
+            _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
+
+            Text feverText = GameObject.Find("Fever").GetComponentInChildren<Text>();
+            feverText.text = "Lv. " + _feverLevel;
+            Text feverUgp = GameObject.Find("Fever Upgrade").GetComponentInChildren<Text>();
+            fever.num = fever.num * 10000;
+            fever.MoneyRule();
+            feverUgp.text = "UPGRADE\n$" + fever.Print();
+        }
     }
 
     public void OnClickButtonSpoon()

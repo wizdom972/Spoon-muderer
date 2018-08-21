@@ -5721,7 +5721,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'UPGRADE
 
-    $'
+    $10b'
 --- !u!222 &1036743033
 CanvasRenderer:
   m_ObjectHideFlags: 0
