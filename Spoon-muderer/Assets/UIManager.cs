@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour {
 
         _money = new Money();
         _click = new Money(1);
-
+        
         _fac = new List<Money>();
         _fac.Add(new Money(100));
         _fac.Add(new Money(500));
@@ -55,7 +55,23 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(22, 'c'));
         _fac.Add(new Money(300, 'c'));
         _fac.Add(new Money(8412, 'c'));
-        _fac.Add(new Money(20.18f, 'd'));
+        _fac.Add(new Money(20.18f, 'd'))
+
+        /*
+        _fac = new List<Money>();
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        */
+
         _facNum = _fac.Count;
 
         _initFac = new List<Money>();
@@ -108,7 +124,7 @@ public class UIManager : MonoBehaviour {
         timeFever = 0.0f;
 
         i_width = Screen.width;
-        i_height = Screen.height;
+        i_height = i_width * 4 / 3;
     }
 	
 	// Update is called once per frame
@@ -148,6 +164,7 @@ public class UIManager : MonoBehaviour {
             {
                 Debug.Log("Fever Time End in " + timeFever);
                 feverBar.transform.position = new Vector3(i_width / 2, feverBar.transform.position.y, feverBar.transform.position.z);
+                delta = (i_width / (float)_feverClick);
                 timeFever = 0;
                 _currentClick = 0;
                 _click = new Money(feverTmp);
@@ -292,15 +309,17 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonFever()
     {
-        Money fever = new Money(10 * Mathf.Pow(10000, _feverLevel));
+        Money fever = new Money(1);
+        //Money fever = new Money(10 * Mathf.Pow(10000, _feverLevel));
         // fever 업그레이드
         if (GetMoney().IsBiggerThan(fever))
         {
             SetMoney(fever, false);
             _feverLevel++;
 
-            delta = (1 / _feverClick) * i_width;
+            int feverTmp = _feverClick;
             _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
+            delta = (float)(i_width * (feverTmp - _currentClick)) / (float)(feverTmp * (_feverClick - _currentClick));
 
             Text feverText = GameObject.Find("Fever").GetComponentInChildren<Text>();
             feverText.text = "Lv. " + _feverLevel;
