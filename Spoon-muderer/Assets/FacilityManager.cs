@@ -67,6 +67,10 @@ public class FacilityManager : MonoBehaviour {
         float height = UIManager.i_height / 562;
 
         facilities[num] = Instantiate(facObj, new Vector3(), Quaternion.identity);
+
+        facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
+        facilities[num].gameObject.name = "Facility" + (num + 1);
+
         facilities[num].transform.localScale = new Vector3(UIManager.i_width / 768, UIManager.i_height / 1024, 1);
         AudioSource facAud = facilities[num].GetComponentInChildren<AudioSource>();
 
@@ -124,8 +128,5 @@ public class FacilityManager : MonoBehaviour {
         }
         facAud.timeSamples = (mainBGM.timeSamples);
         facAud.Play();
-
-        facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
-        facilities[num].gameObject.name = "Facility" + (num + 1);
     }
 }
