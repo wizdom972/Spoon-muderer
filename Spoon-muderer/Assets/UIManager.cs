@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
 
-    public static int i_width, i_height;
+    public static int iWidth, iHeight;
 
     private Money _money;     // 재화
     private Money _click;     // 클릭 당 얻는 재화
@@ -38,12 +38,23 @@ public class UIManager : MonoBehaviour {
     void Start()
     {
 
-        i_width = Screen.width;
-        i_height = Screen.height;
+        iWidth = Screen.width;
+        //i_height = iWidth * 4 / 3;
+        iHeight = Screen.height;
+
+        int hDelta = Screen.height - iWidth * 4 / 3;
+        Debug.Log("delta is " + hDelta);
+        GameObject.Find("Game Display").transform.Translate(new Vector3(0, hDelta / 2, 0));
+        GameObject.Find("Money Up").transform.Translate(new Vector3(0, hDelta / 2, 0));
+        GameObject.Find("Buttons").transform.Translate(new Vector3(0, (-1) * hDelta / 2, 0));
+        GameObject.Find("Facility Scroll").GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GameObject.Find("Facility Scroll").GetComponent<RectTransform>().rect.height + hDelta * 768 / iWidth);
+        GameObject.Find("Click Scroll").GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GameObject.Find("Click Scroll").GetComponent<RectTransform>().rect.height + hDelta * 768 / iWidth);
+        GameObject.Find("Fever Scroll").GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GameObject.Find("Fever Scroll").GetComponent<RectTransform>().rect.height + hDelta * 768 / iWidth);
+        GameObject.Find("Spoon Scroll").GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GameObject.Find("Spoon Scroll").GetComponent<RectTransform>().rect.height + hDelta * 768 / iWidth);
 
         _money = new Money();
         _click = new Money(1);
-        
+        ///*
         _fac = new List<Money>();
         _fac.Add(new Money(100));
         _fac.Add(new Money(500));
@@ -56,7 +67,7 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(7, 'd'));
         _fac.Add(new Money(150, 'd'));
         _fac.Add(new Money(3120, 'd'));
-        
+        //*/
         /*
         _fac = new List<Money>();
         _fac.Add(new Money(1));
@@ -117,14 +128,11 @@ public class UIManager : MonoBehaviour {
         fm = GameObject.Find("FacilityManager").GetComponent<FacilityManager>();
 
         Debug.Log("have to click " + _feverClick + " times");
-        delta = (i_width / (float)_feverClick);
+        delta = (iWidth / (float)_feverClick);
         Debug.Log("delta: " + delta);
         timeSpan = 0.0f;
         checkTime = 1.0f;
         timeFever = 0.0f;
-
-        i_width = Screen.width;
-        i_height = i_width * 4 / 3;
     }
 	
 	// Update is called once per frame
@@ -163,8 +171,8 @@ public class UIManager : MonoBehaviour {
             if (timeFever > duration)
             {
                 Debug.Log("Fever Time End in " + timeFever);
-                feverBar.transform.position = new Vector3(i_width / 2, feverBar.transform.position.y, feverBar.transform.position.z);
-                delta = (i_width / (float)_feverClick);
+                feverBar.transform.position = new Vector3(iWidth / 2, feverBar.transform.position.y, feverBar.transform.position.z);
+                delta = (iWidth / (float)_feverClick);
                 timeFever = 0;
                 _currentClick = 0;
                 _click = new Money(feverTmp);
@@ -319,7 +327,7 @@ public class UIManager : MonoBehaviour {
 
             int feverTmp = _feverClick;
             _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
-            delta = (float)(i_width * (feverTmp - _currentClick)) / (float)(feverTmp * (_feverClick - _currentClick));
+            delta = (float)(iWidth * (feverTmp - _currentClick)) / (float)(feverTmp * (_feverClick - _currentClick));
 
             Text feverText = GameObject.Find("Fever").GetComponentInChildren<Text>();
             feverText.text = "Lv. " + _feverLevel;

@@ -63,8 +63,8 @@ public class FacilityManager : MonoBehaviour {
 
     public void newFacObj(int num)
     {
-        float width = (float)UIManager.i_width / 768f;
-        float height = (float)UIManager.i_height / 1024f;
+        float width = (float)UIManager.iWidth / 768f;
+        float height = (float)UIManager.iHeight / 1024f;
 
         facilities[num] = Instantiate(facObj, new Vector3(), Quaternion.identity);
 
@@ -82,49 +82,59 @@ public class FacilityManager : MonoBehaviour {
                 //facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
                 break;
             case 1:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 390 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 - 150 * width, Screen.height / 2 + 390 * height, 0);
                 facAud.clip = (soundManager.audio01);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
+                GameObject.Find("gray2").SetActive(false);
                 break;
             case 2:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 390 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 + 150 * width, Screen.height / 2 + 390 * height, 0);
                 facAud.clip = (soundManager.audio02);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/드럼_고양이") as Sprite;
+                GameObject.Find("gray3").SetActive(false);
                 break;
             case 3:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 300 * width, Screen.height / 2 + 290 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 + 300 * width, Screen.height / 2 + 290 * height, 0);
                 facAud.clip = (soundManager.audio03);
                 //facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
+                GameObject.Find("gray4").SetActive(false);
                 break;
             case 4:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 300 * width, Screen.height / 2 + 140 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 + 300 * width, Screen.height / 2 + 140 * height, 0);
                 facAud.clip = (soundManager.audio04);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/발라폰_오징어") as Sprite;
+                GameObject.Find("gray5").SetActive(false);
                 break;
             case 5:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 90 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 + 150 * width, Screen.height / 2 + 90 * height, 0);
                 facAud.clip = (soundManager.audio05);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/바이올린_베짱이") as Sprite;
+                GameObject.Find("gray6").SetActive(false);
                 break;
             case 6:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 90 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 - 150 * width, Screen.height / 2 + 90 * height, 0);
                 facAud.clip = (soundManager.audio06);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/비올라_베짱이_가을") as Sprite;
+                GameObject.Find("gray7").SetActive(false);
                 break;
             case 7:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 300 * width, Screen.height / 2 + 140 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 - 300 * width, Screen.height / 2 + 140 * height, 0);
                 facAud.clip = (soundManager.audio07);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/심벌즈_원숭이") as Sprite;
+                GameObject.Find("gray8").SetActive(false);
                 break;
 
             case 8:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 240 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 - 150 * width, Screen.height / 2 + 240 * height, 0);
+                GameObject.Find("gray9").SetActive(false);
                 break;
             case 9:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 240 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2 + 150 * width, Screen.height / 2 + 240 * height, 0);
+                GameObject.Find("gray10").SetActive(false);
                 break;
             case 10:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2, Screen.height / 2 + 210 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.iWidth / 2, Screen.height / 2 + 210 * height, 0);
+                GameObject.Find("gray11").SetActive(false);
                 break;
         }
         facAud.timeSamples = (mainBGM.timeSamples);
