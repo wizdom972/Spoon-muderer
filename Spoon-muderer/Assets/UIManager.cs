@@ -49,13 +49,13 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(500));
         _fac.Add(new Money(1, 'b'));
         _fac.Add(new Money(50, 'b'));
-        _fac.Add(new Money(432, 'b'));
-        _fac.Add(new Money(3200, 'b'));
-        _fac.Add(new Money(1.54f, 'c'));
-        _fac.Add(new Money(22, 'c'));
-        _fac.Add(new Money(300, 'c'));
-        _fac.Add(new Money(8412, 'c'));
-        _fac.Add(new Money(20.18f, 'd'));
+        _fac.Add(new Money(2018, 'b'));
+        _fac.Add(new Money(2.22f, 'c'));
+        _fac.Add(new Money(40, 'c'));
+        _fac.Add(new Money(1234, 'c'));
+        _fac.Add(new Money(7, 'd'));
+        _fac.Add(new Money(150, 'd'));
+        _fac.Add(new Money(3120, 'd'));
         
         /*
         _fac = new List<Money>();
@@ -309,8 +309,8 @@ public class UIManager : MonoBehaviour {
 
     public void OnClickButtonFever()
     {
-        Money fever = new Money(1);
-        //Money fever = new Money(10 * Mathf.Pow(10000, _feverLevel));
+        //Money fever = new Money(1);
+        Money fever = new Money(10 * Mathf.Pow(10000, _feverLevel));
         // fever 업그레이드
         if (GetMoney().IsBiggerThan(fever))
         {

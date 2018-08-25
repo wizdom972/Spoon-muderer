@@ -201,7 +201,6 @@ RectTransform:
   - {fileID: 1299251408}
   - {fileID: 532805627}
   - {fileID: 1268358244}
-  - {fileID: 367663114}
   - {fileID: 1870609902}
   - {fileID: 2021519532}
   - {fileID: 603171849}
@@ -215,6 +214,7 @@ RectTransform:
   - {fileID: 667789127}
   - {fileID: 170856566}
   - {fileID: 122635548}
+  - {fileID: 367663114}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 168935846}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.3369141
+  m_Size: 0.33691406
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -820,7 +820,7 @@ Prefab:
     - target: {fileID: 224690802830320076, guid: 683fd53fd6d46774298562c9f016ae8e,
         type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224690802830320076, guid: 683fd53fd6d46774298562c9f016ae8e,
         type: 2}
@@ -1046,7 +1046,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $22c'
+    $40c'
 --- !u!222 &103345671
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1081,7 +1081,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5924688}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1305,7 +1305,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5924688}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2077,7 +2077,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5924688}
-  m_RootOrder: 3
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2245,7 +2245,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1780692505}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.23630139
+  m_Size: 0.23630136
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3358,7 +3358,7 @@ RectTransform:
   - {fileID: 1600175570}
   - {fileID: 378751650}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3459,7 +3459,7 @@ RectTransform:
   m_Children:
   - {fileID: 243794535}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3918,7 +3918,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $8412c'
+    $7d'
 --- !u!222 &656056053
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4101,7 +4101,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5924688}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4217,7 +4217,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1282083738}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.3369141
+  m_Size: 0.33691406
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4881,7 +4881,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $20.18d'
+    $150d'
 --- !u!222 &803070364
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5412,7 +5412,7 @@ RectTransform:
   m_Children:
   - {fileID: 191646720}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6049,7 +6049,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $300c'
+    $1234c'
 --- !u!222 &1090146911
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6432,7 +6432,7 @@ RectTransform:
   m_Children:
   - {fileID: 1605587143}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6704,7 +6704,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $3200b'
+    $2.22c'
 --- !u!222 &1216074282
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7139,7 +7139,7 @@ RectTransform:
   - {fileID: 427450616}
   - {fileID: 1581754739}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7827,7 +7827,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1636784614}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.3369141
+  m_Size: 0.33691406
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8399,7 +8399,7 @@ RectTransform:
   m_Children:
   - {fileID: 1528861882}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9348,7 +9348,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $432b'
+    $2018b'
 --- !u!222 &1864078749
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9384,7 +9384,7 @@ RectTransform:
   m_Children:
   - {fileID: 1377637878}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9456,7 +9456,7 @@ RectTransform:
   - {fileID: 1781789964}
   - {fileID: 702533150}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9664,7 +9664,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'BUY
 
-    $1.54c'
+    $40c'
 --- !u!222 &1934837274
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9927,7 +9927,7 @@ RectTransform:
   - {fileID: 1228530039}
   - {fileID: 16756769}
   m_Father: {fileID: 5924688}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

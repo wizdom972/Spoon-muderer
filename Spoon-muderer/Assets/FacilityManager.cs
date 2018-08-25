@@ -69,6 +69,7 @@ public class FacilityManager : MonoBehaviour {
         facilities[num] = Instantiate(facObj, new Vector3(), Quaternion.identity);
 
         facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
+        GameObject.Find("Money Up").transform.SetAsLastSibling();
         facilities[num].gameObject.name = "Facility" + (num + 1);
 
         facilities[num].transform.localScale = new Vector3(1, 1, 1);
