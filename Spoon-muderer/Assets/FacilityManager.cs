@@ -63,15 +63,15 @@ public class FacilityManager : MonoBehaviour {
 
     public void newFacObj(int num)
     {
-        float width = UIManager.i_width / 768;
-        float height = UIManager.i_height / 562;
+        float width = (float)UIManager.i_width / 768f;
+        float height = (float)UIManager.i_height / 1024f;
 
         facilities[num] = Instantiate(facObj, new Vector3(), Quaternion.identity);
 
         facilities[num].transform.SetParent(GameObject.Find("Canvas").transform);
         facilities[num].gameObject.name = "Facility" + (num + 1);
 
-        facilities[num].transform.localScale = new Vector3(UIManager.i_width / 768, UIManager.i_height / 1024, 1);
+        facilities[num].transform.localScale = new Vector3(1, 1, 1);
         AudioSource facAud = facilities[num].GetComponentInChildren<AudioSource>();
 
         switch (num)
@@ -81,49 +81,49 @@ public class FacilityManager : MonoBehaviour {
                 //facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
                 break;
             case 1:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 30 * width, UIManager.i_height / 2 + 450 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 390 * height, 0);
                 facAud.clip = (soundManager.audio01);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
                 break;
             case 2:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 270 * width, UIManager.i_height / 2 + 450 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 390 * height, 0);
                 facAud.clip = (soundManager.audio02);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/드럼_고양이") as Sprite;
                 break;
             case 3:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 420 * width, UIManager.i_height / 2 + 380 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 300 * width, Screen.height / 2 + 290 * height, 0);
                 facAud.clip = (soundManager.audio03);
                 //facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/트럼펫_펭귄") as Sprite;
                 break;
             case 4:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 420 * width, UIManager.i_height / 2 + 230 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 300 * width, Screen.height / 2 + 140 * height, 0);
                 facAud.clip = (soundManager.audio04);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/발라폰_오징어") as Sprite;
                 break;
             case 5:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 270 * width, UIManager.i_height / 2 + 150 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 90 * height, 0);
                 facAud.clip = (soundManager.audio05);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/바이올린_베짱이") as Sprite;
                 break;
             case 6:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 30 * width, UIManager.i_height / 2 + 150 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 90 * height, 0);
                 facAud.clip = (soundManager.audio06);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/비올라_베짱이_가을") as Sprite;
                 break;
             case 7:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 180 * width, UIManager.i_height / 2 + 230 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 300 * width, Screen.height / 2 + 140 * height, 0);
                 facAud.clip = (soundManager.audio07);
                 facilities[num].GetComponent<Image>().sprite = Resources.Load<Sprite>("Facility/심벌즈_원숭이") as Sprite;
                 break;
 
             case 8:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 30 * width, UIManager.i_height / 2 + 300 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 - 150 * width, Screen.height / 2 + 240 * height, 0);
                 break;
             case 9:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 270 * width, UIManager.i_height / 2 + 300 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 150 * width, Screen.height / 2 + 240 * height, 0);
                 break;
             case 10:
-                facilities[num].transform.position = new Vector3(UIManager.i_width / 2 + 120 * width, UIManager.i_height / 2 + 330 * height, 0);
+                facilities[num].transform.position = new Vector3(UIManager.i_width / 2, Screen.height / 2 + 210 * height, 0);
                 break;
         }
         facAud.timeSamples = (mainBGM.timeSamples);

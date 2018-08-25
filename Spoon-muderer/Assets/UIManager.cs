@@ -55,8 +55,8 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(22, 'c'));
         _fac.Add(new Money(300, 'c'));
         _fac.Add(new Money(8412, 'c'));
-        _fac.Add(new Money(20.18f, 'd'))
-
+        _fac.Add(new Money(20.18f, 'd'));
+        
         /*
         _fac = new List<Money>();
         _fac.Add(new Money(1));
