@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour {
 
 
     public static int iWidth, iHeight;
+    public static int hDelta;
 
     private Money _money;     // 재화
     private Money _click;     // 클릭 당 얻는 재화
@@ -42,7 +43,7 @@ public class UIManager : MonoBehaviour {
         //i_height = iWidth * 4 / 3;
         iHeight = Screen.height;
 
-        int hDelta = Screen.height - iWidth * 4 / 3;
+        hDelta = Screen.height - iWidth * 4 / 3;
         Debug.Log("delta is " + hDelta);
         GameObject.Find("Game Display").transform.Translate(new Vector3(0, hDelta / 2, 0));
         GameObject.Find("Money Up").transform.Translate(new Vector3(0, hDelta / 2, 0));
@@ -64,24 +65,6 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(2.22f, 'c'));
         _fac.Add(new Money(40, 'c'));
         _fac.Add(new Money(1234, 'c'));
-        _fac.Add(new Money(7, 'd'));
-        _fac.Add(new Money(150, 'd'));
-        _fac.Add(new Money(3120, 'd'));
-        //*/
-        /*
-        _fac = new List<Money>();
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        */
 
         _facNum = _fac.Count;
 
