@@ -19,19 +19,19 @@ public class FacilityManager : MonoBehaviour {
     {
         //facNum = 0;
 
-        facilities = new GameObject[11];
+        facilities = new GameObject[8];
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         mainBGM = GameObject.Find("Facility1").GetComponent<AudioSource>();
         
 
-        isPurchased = new bool[11];
+        isPurchased = new bool[8];
         for (int i = 0; i < 8; i++)
         {
             isPurchased[i] = false;
         }
         isPurchased[0] = true;
 
-        facEarn = new float[11];
+        facEarn = new float[8];
         facEarn[0] = 0.1f;
         facEarn[1] = 0.5f;
         facEarn[2] = 4;

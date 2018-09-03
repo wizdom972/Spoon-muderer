@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour {
 
         _money = new Money();
         _click = new Money(1);
-        ///*
+        /*
         _fac = new List<Money>();
         _fac.Add(new Money(100));
         _fac.Add(new Money(500));
@@ -65,6 +65,17 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(2.22f, 'c'));
         _fac.Add(new Money(40, 'c'));
         _fac.Add(new Money(1234, 'c'));
+        */
+
+        _fac = new List<Money>();
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
+        _fac.Add(new Money(1));
 
         _facNum = _fac.Count;
 
@@ -265,13 +276,24 @@ public class UIManager : MonoBehaviour {
             }
             // 재화 소모
             SetMoney(_fac[num], false);
-            // 구매 가격 증가
+            // 구매 가격 증가, 레벨 증가
             _fac[num] = new Money(_initFac[num].num * Mathf.Pow(1.13f, _facLevel[num]++), _initFac[num].letter1, _initFac[num].letter2);
             _fac[num].MoneyRule();
 
             // 텍스트 업데이트
-            b.GetComponentInChildren<Text>().text = "UPGRADE\n$" + _fac[num].Print(); // 버튼, 소수 셋째 자리에서 버림 표기
-            facText.text = facText.text.Remove(facText.text.LastIndexOf(".") + 1) + _facLevel[num]; // 레벨
+            bool[] tmp = fm.GetIsPurchased();
+            int count = 0;
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                if (tmp[i])
+                    count++;
+            }
+            Money facE = new Money((fm.facEarn[num] * _facLevel[num]) * Mathf.Pow(1.5f, count) * 13);
+            facE.MoneyRule();
+            facText.text = facText.text.Remove(facText.text.LastIndexOf("v") + 2) + _facLevel[num] + "\n현재 초당 재화 생산량 " + facE.Print(); // 레벨
+            Money delta = new Money(fm.facEarn[num] * Mathf.Pow(1.5f, count) * 13);
+            delta.MoneyRule();
+            b.GetComponentInChildren<Text>().text = "UPGRADE $" + _fac[num].Print() + "\n\n+ " + delta.Print();
         }
     }
 
@@ -290,6 +312,7 @@ public class UIManager : MonoBehaviour {
             Text clickUpg = GameObject.Find("Click Upgrade").GetComponentInChildren<Text>();
             click.num = click.num * 2.5f;
             click.MoneyRule();
+
             clickUpg.text = "UPGRADE\n$" + click.Print();
 
             _click.num = _click.num * 2.5f;
@@ -356,7 +379,7 @@ public class UIManager : MonoBehaviour {
     {
         Money earn = new Money();
         int count = 0;
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 8; i++)
         {
             if (fm.GetIsPurchased()[i])
             {
