@@ -299,7 +299,7 @@ public class UIManager : MonoBehaviour {
             {
                 facMoney = new Money(fm.facEarn[i] * _facLevel[i] * Mathf.Pow(1.5f, count) * 13);
                 facMoney.MoneyRule();
-                textArr[i].text = textArr[i].text.Remove(textArr[i].text.LastIndexOf("v") + 2) + _facLevel[i] + "\n현재 초당 재화 생산량 " + facMoney.Print();
+                textArr[i].text = textArr[i].text.Remove(textArr[i].text.LastIndexOf("v") + 2) + _facLevel[i] + "\n" + facMoney.Print() + " /sec ";
 
                 delta = new Money(fm.facEarn[i] * Mathf.Pow(1.5f, count) * 13);
                 delta.MoneyRule();
