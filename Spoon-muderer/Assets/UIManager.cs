@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour {
 
     GameObject fever, feverBar, feverText; // 피버 오브젝트
 
+    Text[] textArr, buttonArr;
+
     GameObject facScroll, cliScroll, fevScroll, spoScroll; // 스크롤뷰 오브젝트
 
     FacilityManager fm;
@@ -55,7 +57,7 @@ public class UIManager : MonoBehaviour {
 
         _money = new Money();
         _click = new Money(1);
-        /*
+
         _fac = new List<Money>();
         _fac.Add(new Money(100));
         _fac.Add(new Money(500));
@@ -65,17 +67,6 @@ public class UIManager : MonoBehaviour {
         _fac.Add(new Money(2.22f, 'c'));
         _fac.Add(new Money(40, 'c'));
         _fac.Add(new Money(1234, 'c'));
-        */
-
-        _fac = new List<Money>();
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
-        _fac.Add(new Money(1));
 
         _facNum = _fac.Count;
 
@@ -98,6 +89,14 @@ public class UIManager : MonoBehaviour {
         cliScroll = GameObject.Find("Click Scroll");
         fevScroll = GameObject.Find("Fever Scroll");
         spoScroll = GameObject.Find("Spoon Scroll");
+
+        textArr = new Text[_facNum];
+        buttonArr = new Text[_facNum];
+        for (int i = 0; i < _facNum; i++)
+        {
+            textArr[i] = GameObject.Find("facility" + (i + 1)).GetComponentInChildren<Text>();
+            buttonArr[i] = GameObject.Find("Button" + (i + 1)).GetComponentInChildren<Text>();
+        }
 
         _clickLevel = 1;
         _spoonLevel = 1;
@@ -281,19 +280,32 @@ public class UIManager : MonoBehaviour {
             _fac[num].MoneyRule();
 
             // 텍스트 업데이트
-            bool[] tmp = fm.GetIsPurchased();
-            int count = 0;
-            for (int i = 0; i < tmp.Length; i++)
+            TextUpdate();
+        }
+    }
+
+    public void TextUpdate()
+    {
+        int count = 0;
+        for (int i = 0; i < fm.GetIsPurchased().Length; i++)
+        {
+            if (fm.GetIsPurchased()[i])
+                count++;
+        }
+        Money facMoney, delta;
+        for(int i = 0; i < _facNum; i++)
+        {
+            if (fm.GetIsPurchased()[i])
             {
-                if (tmp[i])
-                    count++;
+                facMoney = new Money(fm.facEarn[i] * _facLevel[i] * Mathf.Pow(1.5f, count) * 13);
+                facMoney.MoneyRule();
+                textArr[i].text = textArr[i].text.Remove(textArr[i].text.LastIndexOf("v") + 2) + _facLevel[i] + "\n현재 초당 재화 생산량 " + facMoney.Print();
+
+                delta = new Money(fm.facEarn[i] * Mathf.Pow(1.5f, count) * 13);
+                delta.MoneyRule();
+                buttonArr[i].text = "UPGRADE\n$" + _fac[i].Print() + "\n+" + delta.Print();
+
             }
-            Money facE = new Money((fm.facEarn[num] * _facLevel[num]) * Mathf.Pow(1.5f, count) * 13);
-            facE.MoneyRule();
-            facText.text = facText.text.Remove(facText.text.LastIndexOf("v") + 2) + _facLevel[num] + "\n현재 초당 재화 생산량 " + facE.Print(); // 레벨
-            Money delta = new Money(fm.facEarn[num] * Mathf.Pow(1.5f, count) * 13);
-            delta.MoneyRule();
-            b.GetComponentInChildren<Text>().text = "UPGRADE $" + _fac[num].Print() + "\n\n+ " + delta.Print();
         }
     }
 
