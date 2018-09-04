@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour {
+public class UIManager : MonoBehaviour
+{
 
 
     public static int iWidth, iHeight;
@@ -17,7 +18,7 @@ public class UIManager : MonoBehaviour {
 
     private List<Money> _initFac;    // 초기 재화 생산 시설 구매 비용
     private List<Money> _fac;        // 재화 생산 시설 업그레이드 비용
-    
+
     private int[] _facLevel;   // 재화 생산 시설 레벨
 
     private float _clickLevel, _spoonLevel; // 클릭 업그레이드 레벨, 스푼 레벨
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour {
 
     GameObject fever, feverBar, feverText; // 피버 오브젝트
 
-    Text[] textArr, buttonArr, buttonSubArr;
+    Text[] textArr, buttonArr, deltaArr;
 
     GameObject facScroll, cliScroll, fevScroll, spoScroll; // 스크롤뷰 오브젝트
 
@@ -60,13 +61,13 @@ public class UIManager : MonoBehaviour {
 
         _fac = new List<Money>();
         _fac.Add(new Money(100));
-        _fac.Add(new Money(500));
-        _fac.Add(new Money(1, 'b'));
-        _fac.Add(new Money(50, 'b'));
-        _fac.Add(new Money(2018, 'b'));
-        _fac.Add(new Money(2.22f, 'c'));
+        _fac.Add(new Money(2500));
+        _fac.Add(new Money(9, 'b'));
+        _fac.Add(new Money(365, 'b'));
+        _fac.Add(new Money(1.23f, 'c'));
         _fac.Add(new Money(40, 'c'));
-        _fac.Add(new Money(1234, 'c'));
+        _fac.Add(new Money(2222, 'c'));
+        _fac.Add(new Money(20.18f, 'd'));
 
         _facNum = _fac.Count;
 
@@ -84,7 +85,7 @@ public class UIManager : MonoBehaviour {
         _facLevel[0] = 1;
 
         moneyText = GameObject.Find("Current Money").GetComponent<Text>();
-        earnText  = GameObject.Find("Earning Money").GetComponent<Text>();
+        earnText = GameObject.Find("Earning Money").GetComponent<Text>();
         facScroll = GameObject.Find("Facility Scroll");
         cliScroll = GameObject.Find("Click Scroll");
         fevScroll = GameObject.Find("Fever Scroll");
@@ -92,12 +93,12 @@ public class UIManager : MonoBehaviour {
 
         textArr = new Text[_facNum];
         buttonArr = new Text[_facNum];
-        buttonSubArr = new Text[_facNum];
+        deltaArr = new Text[_facNum];
         for (int i = 0; i < _facNum; i++)
         {
             textArr[i] = GameObject.Find("facility" + (i + 1)).GetComponentInChildren<Text>();
-            buttonArr[i] = GameObject.Find("Button" + (i + 1)).GetComponentInChildren<Text>();
-            buttonSubArr[i] = GameObject.Find("Button" + (i + 1)).GetComponentInChildren<Text>();
+            buttonArr[i] = GameObject.Find("Text" + (i + 1)).GetComponent<Text>();
+            deltaArr[i] = GameObject.Find("Delta" + (i + 1)).GetComponent<Text>();
         }
 
         _clickLevel = 1;
@@ -105,7 +106,7 @@ public class UIManager : MonoBehaviour {
 
         _currentClick = 0;
         _feverLevel = 1;
-        _feverClick = (int) (1000 * Mathf.Pow(0.89f, _feverLevel)) + 1;
+        _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel)) + 1;
         _isFeverTime = false;
         _hasSetFever = false;
 
@@ -129,13 +130,13 @@ public class UIManager : MonoBehaviour {
         checkTime = 1.0f;
         timeFever = 0.0f;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         if (moneyText != null)
         {
-            moneyText.text = "Current: " + GetMoney().Print();     
+            moneyText.text = "Current: " + GetMoney().Print();
         }
         if (earnText != null)
         {
@@ -182,13 +183,13 @@ public class UIManager : MonoBehaviour {
         {
             FeverTime();
         }
-	}
+    }
 
     public Money GetMoney()   // 재화 반환
     {
         return _money;
     }
-    
+
     public void SetMoney(Money extra, bool add)  // 재화 수정
     {
         if (add)
@@ -274,6 +275,8 @@ public class UIManager : MonoBehaviour {
                 fm.newFacObj(num);
                 fm.SetIsPurchased(num, true);
                 facText.text = facText.text + "\nLv.1";
+
+                b.GetComponent<Image>().sprite = Resources.Load<Sprite>("Background/업그레이드_버튼3") as Sprite;
             }
             // 재화 소모
             SetMoney(_fac[num], false);
@@ -295,7 +298,7 @@ public class UIManager : MonoBehaviour {
                 count++;
         }
         Money facMoney, delta;
-        for(int i = 0; i < _facNum; i++)
+        for (int i = 0; i < _facNum; i++)
         {
             if (fm.GetIsPurchased()[i])
             {
@@ -305,8 +308,8 @@ public class UIManager : MonoBehaviour {
 
                 delta = new Money(fm.facEarn[i] * Mathf.Pow(1.5f, count) * 13);
                 delta.MoneyRule();
-                buttonArr[i].text = "UPGRADE\n$" + _fac[i].Print() + "\n+" + delta.Print();
-
+                buttonArr[i].text = "UPGRADE\n$" + _fac[i].Print() + "\n";
+                deltaArr[i].text = "+ " + delta.Print() + " /sec";
             }
         }
     }
@@ -349,12 +352,14 @@ public class UIManager : MonoBehaviour {
             _feverClick = (int)(1000 * Mathf.Pow(0.89f, _feverLevel));
             delta = (float)(iWidth * (feverTmp - _currentClick)) / (float)(feverTmp * (_feverClick - _currentClick));
 
-            Text feverText = GameObject.Find("Fever").GetComponentInChildren<Text>();
-            feverText.text = "Lv. " + _feverLevel;
+            Text feverLevelText = GameObject.Find("Fever").GetComponentInChildren<Text>();
+            feverLevelText.text = "Lv. " + _feverLevel;
             Text feverUgp = GameObject.Find("Fever Upgrade").GetComponentInChildren<Text>();
             fever.num = fever.num * 10000;
             fever.MoneyRule();
             feverUgp.text = "UPGRADE\n$" + fever.Print();
+
+            feverText.GetComponent<Text>().text = _feverClick - _currentClick + "";
         }
     }
 
@@ -376,7 +381,7 @@ public class UIManager : MonoBehaviour {
             spoonUpg.text = "UPGRADE\n$" + spoon.Print();
 
             _click.num = _click.num * 4;
-            _click.MoneyRule(); 
+            _click.MoneyRule();
             Debug.Log(_click.Print());
         }
     }

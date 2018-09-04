@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Money {
+public class Money
+{
 
     public float num;
     public char letter1, letter2;
@@ -15,7 +16,7 @@ public class Money {
     }
 
     public Money(float n)
-    {   
+    {
         num = n;
         letter1 = ' ';
         letter2 = 'a';
@@ -73,15 +74,29 @@ public class Money {
         {
             if (this.letter2 < addNum.letter2)
             {
-                addNum.num = addNum.num * 10000;
-                addNum.letter2 = (char)(addNum.letter2 - 1);
+                if (this.letter2 == addNum.letter2 - 1)
+                {
+                    addNum.num = addNum.num * 10000;
+                    addNum.letter2 = (char)(addNum.letter2 - 1);
+                    this.num = this.num + addNum.num;
+                }
+                else
+                {
+                    this.num = addNum.num;
+                    this.letter2 = addNum.letter2;
+                }
             }
             else if (this.letter2 > addNum.letter2)
             {
-                this.num = this.num * 10000;
-                this.letter2 = (char)(this.letter2 - 1);
+                if (this.letter2 - 1 == addNum.letter2)
+                {
+                    this.num = this.num * 10000;
+                    this.letter2 = (char)(this.letter2 - 1);
+                    this.num = this.num + addNum.num;
+                }
             }
-            this.num = this.num + addNum.num;
+            else
+                this.num = this.num + addNum.num;
         }
         else if (this.letter1 > addNum.letter1)
         {
