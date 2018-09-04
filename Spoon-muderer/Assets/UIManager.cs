@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour {
 
     GameObject fever, feverBar, feverText; // 피버 오브젝트
 
-    Text[] textArr, buttonArr;
+    Text[] textArr, buttonArr, buttonSubArr;
 
     GameObject facScroll, cliScroll, fevScroll, spoScroll; // 스크롤뷰 오브젝트
 
@@ -92,10 +92,12 @@ public class UIManager : MonoBehaviour {
 
         textArr = new Text[_facNum];
         buttonArr = new Text[_facNum];
+        buttonSubArr = new Text[_facNum];
         for (int i = 0; i < _facNum; i++)
         {
             textArr[i] = GameObject.Find("facility" + (i + 1)).GetComponentInChildren<Text>();
             buttonArr[i] = GameObject.Find("Button" + (i + 1)).GetComponentInChildren<Text>();
+            buttonSubArr[i] = GameObject.Find("Button" + (i + 1)).GetComponentInChildren<Text>();
         }
 
         _clickLevel = 1;
