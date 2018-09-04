@@ -317,7 +317,7 @@ public class UIManager : MonoBehaviour
     public void OnClickButtonClick()
     {
         // Click 업그레이드
-        Money click = new Money(243 * Mathf.Pow(2.5f, _clickLevel)); // 구매 시 필요한 재화
+        Money click = new Money(250 * Mathf.Pow(2.5f, _clickLevel)); // 구매 시 필요한 재화
         if (GetMoney().IsBiggerThan(click))
         {
             SetMoney(click, false); // 재화 소모
